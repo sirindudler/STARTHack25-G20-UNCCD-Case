@@ -106,28 +106,21 @@ export default function Home() {
           </div>
 
           <ul className="flex space-x-4">
-          <div className="inline-flex rounded-md shadow-sm" role="group">
-                {languages.map((language) => {
-                  const isActive = currentLanguage === language.code;
-                  return (
-                    <button 
-                      key={language.code}
-                      className={`
-                        px-3 py-1.5 text-sm font-medium border flex items-center
-                        ${languages.indexOf(language) === 0 ? 'rounded-l-md' : ''}
-                        ${languages.indexOf(language) === languages.length - 1 ? 'rounded-r-md' : ''}
-                        ${isActive 
-                          ? 'bg-blue-600 text-white border-blue-600' 
-                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}
-                      `}
-                      onClick={() => setCurrentLanguage(language.code)}
-                    >
-                      <span className="text-sm mr-1">{language.flag}</span>
-                      <span>{language.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
+          <Select
+  value={currentLanguage}
+  onValueChange={setCurrentLanguage}
+>
+  <SelectTrigger className="w-[120px]">
+    <SelectValue placeholder="Language" />
+  </SelectTrigger>
+  <SelectContent>
+    {languages.map((language) => (
+      <SelectItem key={language.code} value={language.code}>
+        {language.name}
+      </SelectItem>
+    ))}
+  </SelectContent>
+</Select>
             <li>
               <Link href="/dashboard/reports" className="hover:text-blue-500">
                 {t('github')}
