@@ -58,6 +58,7 @@ import {
 } from "@/components/ui/select"
 
 import { useState } from "react";
+import { useTranslation } from "@/utils/useTranslation";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -73,45 +74,63 @@ export default function Home() {
   // Move the useState hook inside the component function
   const [selectedDataType, setSelectedDataType] = useState("rainfall");
 
+  const [currentLanguage, setCurrentLanguage] = useState("en");
+  const { t } = useTranslation(currentLanguage);
+  
+  const languages = [
+    { code: 'en', name: 'English'},
+    { code: 'ar', name: 'العربية'},
+    { code: 'fr', name: 'Français'}
+  ];
+
   return (
     <div className={`${geistSans.variable} ${geistMono.variable} font-sans`}>
       {/* Navigation Bar */}
       <nav className="bg-gray-100 p-4 border-b border-gray-200">
         <div className="container mx-auto flex justify-between items-center">
           <Link href="/" className="text-xl font-bold">
-            UNCCD Dashboard
+            {t('dashboard')}
           </Link>
 
           <div className="mx-auto">
             <Select defaultValue="assaba">
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a region" />
+                <SelectValue placeholder={t('selectRegion')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="assaba">Assaba</SelectItem>
-                <SelectItem value="kifa">Kiffa</SelectItem>
-                <SelectItem value="kankoussa">Kankoussa</SelectItem>
+                <SelectItem value="assaba">{t('assaba')}</SelectItem>
+                <SelectItem value="kifa">{t('kiffa')}</SelectItem>
+                <SelectItem value="kankoussa">{t('kankoussa')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <ul className="flex space-x-4">
-            <li>
-              <Select defaultValue="eng" >
-                <SelectTrigger>
-                  <SelectValue>English</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="eng">English</SelectItem>
-                  <SelectItem value="fr">français</SelectItem>
-                  <SelectItem value="arb">System</SelectItem>
-                </SelectContent>
-              </Select>
-
-            </li>
+          <div className="inline-flex rounded-md shadow-sm" role="group">
+                {languages.map((language) => {
+                  const isActive = currentLanguage === language.code;
+                  return (
+                    <button 
+                      key={language.code}
+                      className={`
+                        px-3 py-1.5 text-sm font-medium border flex items-center
+                        ${languages.indexOf(language) === 0 ? 'rounded-l-md' : ''}
+                        ${languages.indexOf(language) === languages.length - 1 ? 'rounded-r-md' : ''}
+                        ${isActive 
+                          ? 'bg-blue-600 text-white border-blue-600' 
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'}
+                      `}
+                      onClick={() => setCurrentLanguage(language.code)}
+                    >
+                      <span className="text-sm mr-1">{language.flag}</span>
+                      <span>{language.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
             <li>
               <Link href="/dashboard/reports" className="hover:text-blue-500">
-                Github
+                {t('github')}
               </Link>
             </li>
             {/* Add more navigation links here */}
@@ -121,8 +140,6 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="container mx-auto p-4">
-
-
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left side - Map Section with Tabs */}
           <div className="lg:w-1/2 w-full h-[70vh] lg:h-[85vh]">
@@ -135,12 +152,12 @@ export default function Home() {
                     onValueChange={setSelectedDataType}
                   >
                     <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select data type" />
+                      <SelectValue placeholder={t('selectDataType')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="rainfall">Rainfall</SelectItem>
-                      <SelectItem value="soil">Soil Quality</SelectItem>
-                      <SelectItem value="ndvi">NDVI</SelectItem>
+                      <SelectItem value="rainfall">{t('rainfall')}</SelectItem>
+                      <SelectItem value="soil">{t('soilQuality')}</SelectItem>
+                      <SelectItem value="ndvi">{t('ndvi')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -167,37 +184,20 @@ export default function Home() {
 
           {/* Right side - Data Cards */}
           <div className="lg:w-1/2 w-full">
-            {/* Add the data type selector here */}
-            
-
             <ScrollArea className="h-[85vh]">
               <div className="space-y-6 pr-4">
               <Card>
                     <CardHeader>
                       <div className="flex justify-between items-center">
                         <CardTitle className="flex items-center">
-                          Assaba Region
+                          {t('assaba')} {t('dashboard').split(' ')[0]}
                         </CardTitle>
-                        <Badge>Info</Badge>
+                        <Badge>{t('regionInfo')}</Badge>
                       </div>
                       <CardDescription>
-                      Assaba, Mauritania, exemplifies a BWh (hot desert) climate characterized by its stark temperature fluctuations. During the cooler month of January, temperatures can drop to a minimum of 11°C (53°F), providing a brief respite from the intense heat.                       </CardDescription>
+                        {t('assabaDescription')}
+                      </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                      <Separator className="my-4" />
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="bg-blue-50 p-4 rounded-md">
-                          <p className="text-sm text-gray-500">
-                            Average Rainfall
-                          </p>
-                          <p className="text-2xl font-bold">500 mm</p>
-                        </div>
-                        <div className="bg-blue-50 p-4 rounded-md">
-                          <p className="text-sm text-gray-500">Trend</p>
-                          <p className="text-2xl font-bold capitalize">UP</p>
-                        </div>
-                      </div>
-                    </CardContent>
                   </Card>
                 {/* Conditionally render cards based on selectedDataType */}
                 {selectedDataType === "rainfall" && (
@@ -205,12 +205,12 @@ export default function Home() {
                     <CardHeader>
                       <div className="flex justify-between items-center">
                         <CardTitle className="flex items-center">
-                          Rainfall Analysis
+                          {t('rainfallAnalysis')}
                         </CardTitle>
-                        <Badge>rainfall</Badge>
+                        <Badge>{t('rainfall')}</Badge>
                       </div>
                       <CardDescription>
-                        Monthly rainfall patterns and trends
+                        {t('monthlyPatterns')}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -241,20 +241,20 @@ export default function Home() {
                           ))}
                         </div>
                         <div className="absolute left-2 top-2 text-sm text-gray-500 flex items-center">
-                          Monthly Rainfall (mm)
+                          {t('monthlyRainfall')}
                         </div>
                       </div>
                       <Separator className="my-4" />
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-blue-50 p-4 rounded-md">
                           <p className="text-sm text-gray-500">
-                            Average Rainfall
+                            {t('averageRainfall')}
                           </p>
                           <p className="text-2xl font-bold">500 mm</p>
                         </div>
                         <div className="bg-blue-50 p-4 rounded-md">
-                          <p className="text-sm text-gray-500">Trend</p>
-                          <p className="text-2xl font-bold capitalize">UP</p>
+                          <p className="text-sm text-gray-500">{t('trend')}</p>
+                          <p className="text-2xl font-bold capitalize">{t('up')}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -266,12 +266,12 @@ export default function Home() {
                     <CardHeader>
                       <div className="flex justify-between items-center">
                         <CardTitle className="flex items-center">
-                          Soil Composition
+                          {t('soilComposition')}
                         </CardTitle>
-                        <Badge>soil quality</Badge>
+                        <Badge>{t('soilQuality')}</Badge>
                       </div>
                       <CardDescription>
-                        Soil type distribution and quality metrics
+                        {t('soilDistribution')}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
@@ -309,20 +309,20 @@ export default function Home() {
                         {/* Right side - Composition table */}
                         <div className="flex flex-col justify-center">
                           <h4 className="text-sm font-medium mb-2">
-                            Soil Composition
+                            {t('soilComposition')}
                           </h4>
                           <div className="space-y-3">
                             <div className="flex items-center">
                               <div className="w-3 h-3 bg-amber-700 mr-2"></div>
-                              <span className="text-sm">Clay - 30%</span>
+                              <span className="text-sm">{t('clay')} - 30%</span>
                             </div>
                             <div className="flex items-center">
                               <div className="w-3 h-3 bg-gray-400 mr-2"></div>
-                              <span className="text-sm">Silt - 45%</span>
+                              <span className="text-sm">{t('silt')} - 45%</span>
                             </div>
                             <div className="flex items-center">
                               <div className="w-3 h-3 bg-yellow-400 mr-2"></div>
-                              <span className="text-sm">Sand - 25%</span>
+                              <span className="text-sm">{t('sand')} - 25%</span>
                             </div>
                           </div>
                         </div>
@@ -330,11 +330,11 @@ export default function Home() {
                       <Separator className="my-4" />
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-green-50 p-4 rounded-md">
-                          <p className="text-sm text-gray-500">Soil pH</p>
+                          <p className="text-sm text-gray-500">{t('soilPH')}</p>
                           <p className="text-2xl font-bold">6.5 pH</p>
                         </div>
                         <div className="bg-green-50 p-4 rounded-md">
-                          <p className="text-sm text-gray-500">Organic Matter</p>
+                          <p className="text-sm text-gray-500">{t('organicMatter')}</p>
                           <p className="text-2xl font-bold">3.2%</p>
                         </div>
                       </div>
@@ -347,25 +347,25 @@ export default function Home() {
                     <CardHeader>
                       <div className="flex justify-between items-center">
                         <CardTitle className="flex items-center">
-                          NDVI Analysis
+                          {t('ndviAnalysis')}
                         </CardTitle>
                         <Badge>vegetation</Badge>
                       </div>
                       <CardDescription>
-                        Normalized Difference Vegetation Index
+                        {t('vegetationIndex')}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="h-64 bg-gray-50 rounded-md p-4">
-                        <h4 className="text-sm font-medium mb-2">Vegetation Health</h4>
+                        <h4 className="text-sm font-medium mb-2">{t('vegetationHealth')}</h4>
                         <div className="space-y-4">
                           {/* NDVI visualization would go here */}
                           <div className="flex items-center justify-between">
-                            <span>Vegetation Density</span>
+                            <span>{t('vegetationDensity')}</span>
                             <Progress value={65} className="w-1/2" />
                           </div>
                           <div className="flex items-center justify-between">
-                            <span>Growth Rate</span>
+                            <span>{t('growthRate')}</span>
                             <Progress value={42} className="w-1/2" />
                           </div>
                         </div>
@@ -373,11 +373,11 @@ export default function Home() {
                       <Separator className="my-4" />
                       <div className="grid grid-cols-2 gap-4">
                         <div className="bg-green-50 p-4 rounded-md">
-                          <p className="text-sm text-gray-500">Average NDVI</p>
+                          <p className="text-sm text-gray-500">{t('averageNDVI')}</p>
                           <p className="text-2xl font-bold">0.68</p>
                         </div>
                         <div className="bg-green-50 p-4 rounded-md">
-                          <p className="text-sm text-gray-500">Year-over-Year</p>
+                          <p className="text-sm text-gray-500">{t('yearOverYear')}</p>
                           <p className="text-2xl font-bold">+12%</p>
                         </div>
                       </div>
