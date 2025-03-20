@@ -1,0 +1,35 @@
+ID: Region
+0: Boumdeid
+1: Kankoussa
+2: Barkéol
+3: Guerou
+4: Kiffa
+
+
+ID: District
+0: Barkéol
+1: Guerou
+2: Barkéol
+3: Kiffa
+4: Kankoussa
+5: Barkéol
+6: Barkéol
+7: Kankoussa
+8: Barkéol
+9: Kiffa
+10: Guerou
+11: Barkéol
+12: Guerou
+13: Kankoussa
+14: Boumdeid
+15: Kiffa
+16: Kankoussa
+17: Barkéol
+18: Guerou
+19: Boumdeid
+20: Kiffa
+21: Kiffa
+22: Barkéol
+23: Boumdeid
+24: Kankoussa
+25: Kiffa
