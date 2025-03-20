@@ -76,11 +76,22 @@ export default function Home() {
 
   const [currentLanguage, setCurrentLanguage] = useState("en");
   const { t } = useTranslation(currentLanguage);
-  
+
+  const [currentRegion, setCurrentRegion] = useState("assaba");
+
   const languages = [
-    { code: 'en', name: 'English'},
-    { code: 'ar', name: 'العربية'},
-    { code: 'fr', name: 'Français'}
+    { code: 'en', name: 'English' },
+    { code: 'ar', name: 'العربية' },
+    { code: 'fr', name: 'Français' }
+  ];
+
+  const regions = [
+    { code: 'assaba', name: 'Assaba' },
+    { code: 'boumeid', name: 'Boumeid' },
+    { code: 'kiffa', name: 'Kiffa' },
+    { code: 'kankossa', name: 'Kankossa' },
+    { code: 'guerou', name: 'Guerou' },
+    { code: 'aftout', name: 'Aftout' },
   ];
 
   return (
@@ -93,40 +104,39 @@ export default function Home() {
           </Link>
 
           <div className="mx-auto">
-            <Select defaultValue="assaba">
+            <Select
+              value={currentRegion}
+              onValueChange={setCurrentRegion}
+            >
               <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder={t('selectRegion')} />
+                <SelectValue placeholder="Region" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="assaba">{t('assaba')}</SelectItem>
-                <SelectItem value="kifa">{t('kiffa')}</SelectItem>
-                <SelectItem value="kankoussa">{t('kankoussa')}</SelectItem>
+                {regions.map((region) => (
+                  <SelectItem key={region.code} value={region.code}>
+                    {region.name}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
           <ul className="flex space-x-4">
-          <Select
-  value={currentLanguage}
-  onValueChange={setCurrentLanguage}
->
-  <SelectTrigger className="w-[120px]">
-    <SelectValue placeholder="Language" />
-  </SelectTrigger>
-  <SelectContent>
-    {languages.map((language) => (
-      <SelectItem key={language.code} value={language.code}>
-        {language.name}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-            <li>
-              <Link href="/dashboard/reports" className="hover:text-blue-500">
-                {t('github')}
-              </Link>
-            </li>
-            {/* Add more navigation links here */}
+            <Select
+              value={currentLanguage}
+              onValueChange={setCurrentLanguage}
+            >
+              <SelectTrigger className="w-[120px]">
+                <SelectValue placeholder="Language" />
+              </SelectTrigger>
+              <SelectContent>
+                {languages.map((language) => (
+                  <SelectItem key={language.code} value={language.code}>
+                    {language.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </ul>
         </div>
       </nav>
@@ -157,13 +167,13 @@ export default function Home() {
                 <div className="relative flex-grow">
                   {/* Static Map Mockup with colored regions */}
                   <div className="absolute inset-0 grid grid-cols-2 grid-rows-3 gap-2">
-                  <Image
-                    src="/final_base_map.png"
-                    alt="Base Map"
-                    fill
-                    style={{ objectFit: "contain" }}
-                    priority
-                  />
+                    <Image
+                      src="/final_base_map.png"
+                      alt="Base Map"
+                      fill
+                      style={{ objectFit: "contain" }}
+                      priority
+                    />
                   </div>
                   {/* Map Legend */}
                   <div className="absolute bottom-0 right-0 bg-white p-2 rounded shadow m-2">
@@ -179,19 +189,19 @@ export default function Home() {
           <div className="lg:w-1/2 w-full">
             <ScrollArea className="h-[85vh]">
               <div className="space-y-6 pr-4">
-              <Card>
-                    <CardHeader>
-                      <div className="flex justify-between items-center">
-                        <CardTitle className="flex items-center">
-                          {t('assaba')} {t('dashboard').split(' ')[0]}
-                        </CardTitle>
-                        <Badge>{t('regionInfo')}</Badge>
-                      </div>
-                      <CardDescription>
-                        {t('assabaDescription')}
-                      </CardDescription>
-                    </CardHeader>
-                  </Card>
+                <Card>
+                  <CardHeader>
+                    <div className="flex justify-between items-center">
+                      <CardTitle className="flex items-center">
+                        {t('assaba')} {t('dashboard').split(' ')[0]}
+                      </CardTitle>
+                      <Badge>{t('regionInfo')}</Badge>
+                    </div>
+                    <CardDescription>
+                      {t('assabaDescription')}
+                    </CardDescription>
+                  </CardHeader>
+                </Card>
                 {/* Conditionally render cards based on selectedDataType */}
                 {selectedDataType === "rainfall" && (
                   <Card>
