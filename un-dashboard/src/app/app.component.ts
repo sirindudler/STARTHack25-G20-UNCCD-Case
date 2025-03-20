@@ -6,5 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'un-dashboard';
+  title = 'UN Dashboard Analytics';
+  isMenuOpen = false;
+  
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 }

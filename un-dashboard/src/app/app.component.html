@@ -1,1 +1,30 @@
-<router-outlet></router-outlet>
+<!-- app.component.html -->
+<div class="app-container">
+  <!-- Header section -->
+  <header class="app-header">
+    <div class="header-content">
+      <h1 class="site-title">Dashboard Analytics</h1>
+      <button class="menu-toggle" (click)="toggleMenu()">
+        <span class="menu-icon"></span>
+      </button>
+    </div>
+    <nav class="main-nav" [class.nav-open]="isMenuOpen">
+      <ul>
+        <li><a routerLink="/dashboard" routerLinkActive="active">Dashboard</a></li>
+        <li><a routerLink="/reports" routerLinkActive="active">Reports</a></li>
+        <li><a routerLink="/analytics" routerLinkActive="active">Analytics</a></li>
+        <li><a routerLink="/settings" routerLinkActive="active">Settings</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main content area -->
+  <main class="app-content">
+    <router-outlet></router-outlet>
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2025 Your Company. All rights reserved.</p>
+  </footer>
+</div>
