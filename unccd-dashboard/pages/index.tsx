@@ -122,34 +122,33 @@ export default function Home() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left side - Map Section with Tabs */}
           <div className="lg:w-1/2 w-full h-[70vh] lg:h-[85vh]">
-            <Card className="h-full">
-              <CardContent className="h-[calc(100%-100px)]">
-              <Select defaultValue="eng" > 
-              <SelectTrigger className="mb-4">
-                <SelectValue>English</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="eng">English</SelectItem>
-                <SelectItem value="fr">français</SelectItem>
-                <SelectItem value="arb">System</SelectItem>
-              </SelectContent>
-            </Select>
-
-
-                {/* Map Mockup */}
-                <div className="relative w-full h-[calc(100%-50px)] rounded-md overflow-hidden border border-gray-200">
+          <Card className="h-full relative">
+              {/* Map Mockup */}
+              <div className="absolute inset-0 rounded-md overflow-hidden border border-gray-200 m-2 flex flex-col border-gray-200">
+                <div className="z-10 m-2">
+                  <Select defaultValue="eng">
+                    <SelectTrigger className="mb-4">
+                      <SelectValue>Rainfall</SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="eng">Rainfall</SelectItem>
+                      <SelectItem value="fr">NDVI</SelectItem>
+                      <SelectItem value="arb">Soil Quality</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="relative flex-grow">
                   {/* Static Map Mockup with colored regions */}
-                  <div className="absolute inset-0 grid grid-cols-2 grid-rows-3 gap-2 p-4">
+                  <div className="absolute inset-0 grid grid-cols-2 grid-rows-3 gap-2">
                     hello
                   </div>
-
                   {/* Map Legend */}
-                  <div className="absolute bottom-4 right-4 bg-white p-2 rounded shadow">
+                  <div className="absolute bottom-0 right-0 bg-white p-2 rounded shadow m-2">
                     <p className="text-xs font-medium mb-1">Rainfall </p>
                     <div className="flex items-center gap-2"></div>
                   </div>
                 </div>
-              </CardContent>
+              </div>
             </Card>
           </div>
 
