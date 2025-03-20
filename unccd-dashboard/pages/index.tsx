@@ -147,11 +147,17 @@ export default function Home() {
                 <div className="relative flex-grow">
                   {/* Static Map Mockup with colored regions */}
                   <div className="absolute inset-0 grid grid-cols-2 grid-rows-3 gap-2">
-                    hello
+                  <Image
+                    src="/final_base_map.png"
+                    alt="Base Map"
+                    fill
+                    style={{ objectFit: "contain" }}
+                    priority
+                  />
                   </div>
                   {/* Map Legend */}
                   <div className="absolute bottom-0 right-0 bg-white p-2 rounded shadow m-2">
-                    <p className="text-xs font-medium mb-1">Rainfall </p>
+                    <p className="text-xs font-medium mb-1">Placeholder </p>
                     <div className="flex items-center gap-2"></div>
                   </div>
                 </div>
@@ -162,24 +168,37 @@ export default function Home() {
           {/* Right side - Data Cards */}
           <div className="lg:w-1/2 w-full">
             {/* Add the data type selector here */}
-            <div className="mb-4">
-              <Select
-                value={selectedDataType}
-                onValueChange={setSelectedDataType}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Select data type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="rainfall">Rainfall</SelectItem>
-                  <SelectItem value="soil">Soil Quality</SelectItem>
-                  <SelectItem value="ndvi">NDVI</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            
 
             <ScrollArea className="h-[85vh]">
               <div className="space-y-6 pr-4">
+              <Card>
+                    <CardHeader>
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="flex items-center">
+                          Assaba Region
+                        </CardTitle>
+                        <Badge>Info</Badge>
+                      </div>
+                      <CardDescription>
+                      Assaba, Mauritania, exemplifies a BWh (hot desert) climate characterized by its stark temperature fluctuations. During the cooler month of January, temperatures can drop to a minimum of 11°C (53°F), providing a brief respite from the intense heat.                       </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <Separator className="my-4" />
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-blue-50 p-4 rounded-md">
+                          <p className="text-sm text-gray-500">
+                            Average Rainfall
+                          </p>
+                          <p className="text-2xl font-bold">500 mm</p>
+                        </div>
+                        <div className="bg-blue-50 p-4 rounded-md">
+                          <p className="text-sm text-gray-500">Trend</p>
+                          <p className="text-2xl font-bold capitalize">UP</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
                 {/* Conditionally render cards based on selectedDataType */}
                 {selectedDataType === "rainfall" && (
                   <Card>
