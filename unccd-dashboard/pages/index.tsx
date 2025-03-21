@@ -646,21 +646,21 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                           </div>
                           <div className="flex items-center gap-2">
                           <div className="w-3 h-3 bg-[#5a1718]"></div>
-                          <span className="text-xs">50%</span>
+                          <span className="text-xs">14</span>
                           </div>
                           </div>
                           )}
                           {selectedDataType === 'gpp' && (
                           <div>
-                            <p className="text-xs font-medium mb-1">{t(selectedDataType)} (mm)</p>
+                            <p className="text-xs font-medium mb-1">{t(selectedDataType)} (kg_C/m²/year)</p>
 
                           <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-[#d6c39f]"></div>
-                          <span className="text-xs">0%</span>
+                          <div className="w-3 h-3 bg-[#3a1276]"></div>
+                          <span className="text-xs">False</span>
                           </div>
                           <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-[#45ffbc]"></div>
-                          <span className="text-xs">50%</span>
+                          <div className="w-3 h-3 bg-[#f8f8fa]"></div>
+                          <span className="text-xs">True</span>
                           </div>
                           </div>
                           )}
@@ -841,7 +841,7 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                   </Card>
                 )}
 
-                {selectedDataType === "ndvi" && (
+                {selectedDataType === "lcc" && (
                   <Card>
                     <CardHeader>
                       <div className="flex justify-between items-center">
