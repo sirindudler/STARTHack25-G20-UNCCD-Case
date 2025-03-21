@@ -406,23 +406,6 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                       priority
                     />
                   </div>
-                  {/* Map Legend */}
-                  <div className="absolute bottom-0 right-0 bg-white p-2 rounded shadow m-2">
-                    <p className="text-xs font-medium mb-1">{t('legend') || 'Legend'}</p>
-                    <div className="flex items-center gap-2">
-                      {/* Add dynamic legend based on selected data type */}
-                      {selectedDataType === "rainfall" && (
-                        <>
-                          <div className="w-3 h-3 bg-blue-200"></div>
-                          <span className="text-xs">0-100 mm</span>
-                          <div className="w-3 h-3 bg-blue-400"></div>
-                          <span className="text-xs">100-300 mm</span>
-                          <div className="w-3 h-3 bg-blue-600"></div>
-                          <span className="text-xs">300+ mm</span>
-                        </>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
             </Card>
