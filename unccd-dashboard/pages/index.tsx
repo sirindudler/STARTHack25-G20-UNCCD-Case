@@ -31,6 +31,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -57,6 +58,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import unccd_logo from "../public/unccd_logo.svg";
+import assaba_default from "../public/feature_layers/assaba_default.svg";
 
 import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "@/utils/useTranslation";
@@ -179,6 +181,13 @@ const geistMono = Geist_Mono({
 export default function Home() {
   // State hooks
   const [selectedDataType, setSelectedDataType] = useState("rainfall");
+  const [selectedMapStyle, setSelectedMapStyle] = useState("default");
+  const [currentTimestamp, setCurrentTimestamp] = useState(2010); // Initialize with a default value
+
+  const handleSliderChange = (value) => {
+    setCurrentTimestamp(value[0]); // Update the state with the new slider value
+  };
+
   const [currentLanguage, setCurrentLanguage] = useState("en");
   const { t } = useTranslation(currentLanguage);
   const [currentRegion, setCurrentRegion] = useState("assaba");
@@ -382,22 +391,89 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
             <Card className="h-full relative">
               {/* Map Mockup */}
               <div className="absolute inset-0 rounded-md overflow-hidden border border-gray-200 m-2 flex flex-col border-gray-200">
-                <div className="z-10 m-2">
+                <div className="z-10 m-2 flex justify-between items-center space-x-4">
                   <Select
-                    value={selectedDataType}
-                    onValueChange={setSelectedDataType}
+                  value={selectedDataType}
+                  onValueChange={setSelectedDataType}
                   >
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder={t('selectDataType')} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="rainfall">{t('rainfall')}</SelectItem>
-                      <SelectItem value="soil">{t('soilQuality')}</SelectItem>
-                      <SelectItem value="ndvi">{t('ndvi')}</SelectItem>
-                    </SelectContent>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder={t('selectDataType')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="rainfall">{t('rainfall')}</SelectItem>
+                    <SelectItem value="lcc">{t('LCC')}</SelectItem>
+                    <SelectItem value="pop">{t('Population Density')}</SelectItem>
+                    <SelectItem value="gpp">{t('GPP')}</SelectItem>
+                  </SelectContent>
                   </Select>
+
+                  {selectedDataType === "rainfall" && (
+                  <Slider
+                    defaultValue={[2010]}
+                    min={2010}
+                    max={2023}
+                    step={1}
+                    onValueChange={handleSliderChange}
+                    className="w-64"
+                  />
+                  )}
+
+                  {selectedDataType === "lcc" && (
+                  <Slider
+                    defaultValue={[2010]}
+                    min={2010}
+                    max={2023}
+                    step={1}
+                    onValueChange={handleSliderChange}
+                    className="w-64"
+                  />
+                  )}
+
+                  {selectedDataType === "pop" && (
+                  <Slider
+                    defaultValue={[2010]}
+                    min={2010}
+                    max={2020}
+                    step={5}
+                    onValueChange={handleSliderChange}
+                    className="w-64"
+                  />
+                  )}
+                  {selectedDataType === "gpp" && (
+                    <Badge className="bg-blue-500 text-white">
+                      {t("negligible change in GPP over time")}
+                    </Badge>
+                  )}
                 </div>
+                
                 <div className="relative flex-grow">
+                  {/* Map style i.e. default or satellite */}
+                  {selectedMapStyle === "default" && (
+                    <Image
+                      src={assaba_default}
+                      alt="Assaba Default"
+                      layout="fill"
+                      objectFit="contain"
+                    />
+                  )}
+                  {selectedMapStyle === "satellite" && (
+                    <Image
+                      src="/feature_layers/assaba_sat.png"
+                      alt="Satellite"
+                      layout="fill"
+                      objectFit="contain"
+                      style={
+                        {
+                          position: 'absolute',
+                          bottom: 0,
+                          right: 0,
+                          width: '100%',
+                          height: '100%',
+                          transform: 'scale(1.05, 1) translate(0%, 0)',
+                                            }
+                      }
+                    />
+                  )}
                   {/* Interactive SVG Map */}
                   <div className="absolute inset-0">
                     {/* Add click handlers to each region */}
@@ -420,11 +496,12 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                       viewBox="0 0 500 760"
                         style={{
                         position: 'absolute',
-                        top: 0,
-                        left: 0,
+                        bottom: 0,
+                        right: 0,
                         width: '100%',
                         height: '100%',
-                    
+                        transform: 'scale(1.05, 1) translate(-1%, 0)',
+                  
                         pointerEvents: 'none',
                         
                         }}
@@ -444,7 +521,7 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                         fill="transparent"
                         
                         stroke="black"
-                        strokeWidth="1"
+                        strokeWidth="2"
                         pointerEvents="all"
                         />
                         
@@ -452,11 +529,148 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                       </div>
                     ))}
                     </div>
-                  {/* Map Legend */}
-                  <div className="absolute bottom-0 right-0 bg-white p-2 rounded shadow m-2">
-                    <p className="text-xs font-medium mb-1">Placeholder </p>
-                    <div className="flex items-center gap-2"></div>
-                  </div>
+                  {/*Overlay png rain data on map*/}
+
+                    <div className="absolute inset-0 w-full h-full pointer-events-none">
+                      {selectedDataType === 'rainfall' && (
+                      <Image
+                      key={currentTimestamp}
+                      src={`/feature_layers/clim_prec/${currentTimestamp}.png`}
+                      objectFit="contain"
+                      style={{ mixBlendMode: 'multiply' }}
+                      layout="fill"
+                      alt="Rainfall data overlay"
+                      />
+                      )}
+
+                        {selectedDataType === 'lcc' && (
+                        <Image
+                        key={currentTimestamp}
+                        src={`/feature_layers/lcc/${currentTimestamp}.png`}
+                        objectFit="contain"
+                        style={{ mixBlendMode: 'multiply',
+                        filter: 'brightness(0.8) saturate(1.2)  hue-rotate(90deg) contrast(1.5)'
+                         }}
+                        layout="fill"
+                        alt="Rainfall data overlay"
+                        />
+                        )}
+
+                      {selectedDataType === 'pop' && (
+                      <Image
+                      key={currentTimestamp}
+                      src={`/feature_layers/pop/${currentTimestamp}.png`}
+                      objectFit="contain"
+                      style={{ mixBlendMode: 'multiply' }}
+                      layout="fill"
+                      alt="Rainfall data overlay"
+                      />
+                      )}
+
+                      {selectedDataType === 'gpp' && (
+                      <Image
+                      key={currentTimestamp}
+                      src={`/feature_layers/gpp_${currentTimestamp}.png`}
+                      objectFit="contain"
+                      style={{ mixBlendMode: 'multiply' }}
+                      layout="fill"
+                      alt="Rainfall data overlay"
+                      />
+                      )}
+
+
+                    </div>
+
+                  {/* Map style choice */}
+                    <div className="absolute bottom-0 left-0 p-2  m-2 flex items-center w-full" style={{ justifyContent: 'space-between' }}>
+                      <Tabs value={selectedMapStyle} onValueChange={setSelectedMapStyle} >
+                      <TabsList>
+                        <TabsTrigger value="satellite">{t('satellite')}</TabsTrigger>
+                        <TabsTrigger value="default">{t('default')}</TabsTrigger>
+                      </TabsList>
+                      </Tabs>
+                      <div className="ml-4 mr-8 p-2 rounded-md" style={{ backdropFilter: 'blur(10px)' }}>
+                      
+                       
+                        <div className="flex items-center gap-2"></div>
+                         {/*<div className="w-3 h-3 bg-gradient-to-r from-[#f8fbfe] to-[#1f366f]"></div>
+                        <span className="text-xs">{t('rainfall')}</span>*/}
+                       {selectedDataType === 'rainfall' && (
+                       <div> 
+                        <p className="text-xs font-medium mb-1">{t(selectedDataType)} (mm/year)</p>
+
+                        <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#f8fbfe]"></div>
+                        <span className="text-xs">0 mm</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#c2d9f2]"></div>
+                        <span className="text-xs">100 mm</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#8bb8e6]"></div>
+                        <span className="text-xs">200 mm</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#5487d9]"></div>
+                        <span className="text-xs">300 mm</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#1f366f]"></div>
+                        <span className="text-xs">400 mm</span>
+                        </div>
+                        </div>
+                        )}
+                        {selectedDataType === 'lcc' && (
+                          
+                        <div>
+                          <p className="text-xs font-medium mb-1">Land Cover Classification</p>
+
+                        <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#d6c39f]"></div>
+                        <span className="text-xs">Barren</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#45ffbc]"></div>
+                        <span className="text-xs">Shurbs etc.</span>
+                        </div>
+                        </div>
+                        )}
+                        {selectedDataType === 'pop' && (
+                          <div>
+                            <p className="text-xs font-medium mb-1">Population Density(/km^2)</p>
+
+                          <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-[#fbf3ee]"></div>
+                          <span className="text-xs">0</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-[#5a1718]"></div>
+                          <span className="text-xs">50%</span>
+                          </div>
+                          </div>
+                          )}
+                          {selectedDataType === 'gpp' && (
+                          <div>
+                            <p className="text-xs font-medium mb-1">{t(selectedDataType)} (mm)</p>
+
+                          <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-[#d6c39f]"></div>
+                          <span className="text-xs">0%</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-[#45ffbc]"></div>
+                          <span className="text-xs">50%</span>
+                          </div>
+                          </div>
+                          )}
+
+
+
+                      </div>
+                    </div>
+
+                 
                 </div>
               </div>
             </Card>
@@ -546,7 +760,7 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                   </Card>
                 )}
 
-                {selectedDataType === "soil" && (
+                {selectedDataType === "lcc" && (
                   <Card>
                     <CardHeader>
                       <div className="flex justify-between items-center">
