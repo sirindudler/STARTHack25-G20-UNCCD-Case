@@ -83,7 +83,7 @@ interface TrendResult {
 // Map the region codes from the UI to the feature IDs in the CSV
 const regionToFeatureMap: Record<string, number> = {
   'boumeid': 0,  // Boumdeid
-  'kankossa': 1, // Kankoussa
+  'kankossa': 1, // Kankossa
   'aftout': 2,  // Barkéol - AKA Aftout
   'guerou': 3,   // Guerou
   'kiffa': 4,    // Kiffa
@@ -343,12 +343,12 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                 <SelectValue placeholder="Region" />
               </SelectTrigger>
               <SelectContent>
-                {regions.map((region) => (
-                  <SelectItem key={region.code} value={region.code}>
-                    {region.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
+      {regions.map((region) => (
+        <SelectItem key={region.code} value={region.code}>
+          {t(`${region.code}`)}
+        </SelectItem>
+      ))}
+    </SelectContent>
             </Select>
           </div>
 
