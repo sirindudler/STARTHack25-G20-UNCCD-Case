@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: 'export',
   trailingSlash: true,
+  basePath: '/STARTHack25-G20-UNCCD-Case',
+  assetPrefix: '/STARTHack25-G20-UNCCD-Case/',
   images: {
     unoptimized: true,
   },
