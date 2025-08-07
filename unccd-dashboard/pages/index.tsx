@@ -64,6 +64,12 @@ import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "@/utils/useTranslation";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, BarChart, Bar } from 'recharts';
 
+// Helper function for handling GitHub Pages base path
+const getImagePath = (path: string) => {
+  const basePath = process.env.NODE_ENV === 'production' ? '/STARTHack25-G20-UNCCD-Case' : '';
+  return `${basePath}${path}`;
+};
+
 // Type definitions
 interface PrecipitationDataItem {
   year: number;
@@ -458,7 +464,7 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                   )}
                   {selectedMapStyle === "satellite" && (
                     <Image
-                      src="/feature_layers/assaba_sat.png"
+                      src={getImagePath("/feature_layers/assaba_sat.png")}
                       alt="Satellite"
                       layout="fill"
                       objectFit="contain"
@@ -535,7 +541,7 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                       {selectedDataType === 'rainfall' && (
                       <Image
                       key={currentTimestamp}
-                      src={`/feature_layers/clim_prec/${currentTimestamp}.png`}
+                      src={getImagePath(`/feature_layers/clim_prec/${currentTimestamp}.png`)}
                       objectFit="contain"
                       style={{ mixBlendMode: 'multiply' }}
                       layout="fill"
@@ -546,7 +552,7 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                         {selectedDataType === 'lcc' && (
                         <Image
                         key={currentTimestamp}
-                        src={`/feature_layers/lcc/${currentTimestamp}.png`}
+                        src={getImagePath(`/feature_layers/lcc/${currentTimestamp}.png`)}
                         objectFit="contain"
                         style={{ mixBlendMode: 'multiply',
                         filter: 'brightness(0.8) saturate(1.2)  hue-rotate(90deg) contrast(1.5)'
@@ -559,7 +565,7 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                       {selectedDataType === 'pop' && (
                       <Image
                       key={currentTimestamp}
-                      src={`/feature_layers/pop/${currentTimestamp}.png`}
+                      src={getImagePath(`/feature_layers/pop/${currentTimestamp}.png`)}
                       objectFit="contain"
                       style={{ mixBlendMode: 'multiply' }}
                       layout="fill"
@@ -570,7 +576,7 @@ const getPrecipitationTrend = (regionCode: string): TrendResult => {
                       {selectedDataType === 'gpp' && (
                       <Image
                       key={currentTimestamp}
-                      src={`/feature_layers/gpp_${currentTimestamp}.png`}
+                      src={getImagePath(`/feature_layers/gpp_${currentTimestamp}.png`)}
                       objectFit="contain"
                       style={{ mixBlendMode: 'multiply' }}
                       layout="fill"
