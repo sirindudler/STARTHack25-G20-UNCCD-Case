@@ -184,7 +184,7 @@ export default function Home() {
   const [selectedMapStyle, setSelectedMapStyle] = useState("default");
   const [currentTimestamp, setCurrentTimestamp] = useState(2010); // Initialize with a default value
 
-  const handleSliderChange = (value) => {
+  const handleSliderChange = (value: number[]) => {
     setCurrentTimestamp(value[0]); // Update the state with the new slider value
   };
 
