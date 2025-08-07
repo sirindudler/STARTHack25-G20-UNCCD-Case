@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd unccd-dashboard
-          npm ci
+          npm install --legacy-peer-deps
 
       - name: Build with Next.js
         run: |
